@@ -1,6 +1,7 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
 import Remarkable from 'remarkable';
+import $ from 'jquery';
 
 class App extends React.Component {
     constructor(props) {
@@ -190,9 +191,95 @@ class MarkdownEditor extends React.Component {
         )
     }
 }
+
+class LifeCycleTest extends React.Component {
+    constructor(props) {
+        super(props);
+        console.log('constructor');
+        this.handleClick = this.handleClick.bind(this);
+        this.state = {
+            name: 'Jay',
+        }
+    }
+
+    handleClick() {
+        this.setState({name: 'Hsiao'});
+    }
+
+    componentWillMount() {
+        console.log('componentWillMount');
+    }
+
+    componentDidMount() {
+        console.log('componentDidMount');
+    }
+
+    componentWillReceiveProps() {
+        console.log('componentWillReceiveProps');
+    }
+
+    componentWillUpdate() {
+        console.log('componentWillUpdate');
+    }
+
+    componentDidUpdate() {
+        console.log('componentDidUpdate');
+    }
+
+    componentWillUnmount() {
+        console.log('componentWillUnmount');
+    }
+
+    render() {
+        return (
+            <div onClick={this.handleClick}>Hi, {this.state.name}</div>
+        );
+    }
+}
+/**
+ * ajax async
+ * deal in componentDidMount
+ */
+
+class GithubUser extends React.Component {
+    constructor(props) {
+        super(props);
+        this.state = {
+            userName: '',
+            githubUrl: '',
+            avatarUrl: '',
+        }
+    }
+
+    componentDidMount() {
+        $.get(this.props.source, (rst) => {
+            console.log(rst);
+            const data = rst;
+            if (data) {
+                this.setState({
+                    userName: data.name,
+                    githubUrl: data.html_url,
+                    avatarUrl: data.avatar_url
+                });
+            }
+        });
+    }
+
+    render() {
+        return (
+            <div>
+                <h3>{this.state.userName}</h3>
+                <img src={this.state.avatarUrl} />
+                <a href={this.state.githubUrl}>Github Link</a>
+            </div>
+        );
+    }
+}
 // ReactDOM.render(<App />, document.getElementById('app'));
 // ReactDOM.render(<HelloMsg name="more"/>, document.getElementById('app'));
 // ReactDOM.render(<HelloMsg_2 />, document.getElementById('app'));
 ReactDOM.render(<Timer />, document.getElementById('app'));
 ReactDOM.render(<TodoApp />, document.getElementById('todo-app'));
 ReactDOM.render(<MarkdownEditor />, document.getElementById('markdown'));
+ReactDOM.render(<LifeCycleTest />, document.getElementById('life-cycle'));
+ReactDOM.render(<GithubUser source="https://api.github.com/users/swust-xiaoj" />, document.getElementById('githubuser'));
