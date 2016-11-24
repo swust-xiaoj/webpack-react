@@ -25,6 +25,7 @@ class MsgList extends React.Component {
         super(props);
         this.state = {};
     }
+
     render() {
         return (
             <ul>
@@ -93,7 +94,8 @@ class Timer extends React.Component {
     }
 
     componentDidMount() {
-        this.interval = setInterval(this.tick, 1000);
+       this.interval = setInterval(this.tick, 1000);
+	// this.interval = setInterval(() => this.tick(), 1000); // arrow function
     }
 
     componentWillUnmount() {
@@ -114,7 +116,8 @@ const TodoList = (props) => (
     <ul>
         {
             props.items.map((item) => (
-                <li data-key={item.id}>{item.text}</li>
+                // Each child in an array or iterator should have a unique "key" prop
+                <li key={item.id}>{item.text}</li>
             ))
         }
     </ul>
@@ -253,7 +256,6 @@ class GithubUser extends React.Component {
 
     componentDidMount() {
         $.get(this.props.source, (rst) => {
-            console.log(rst);
             const data = rst;
             if (data) {
                 this.setState({
@@ -275,6 +277,66 @@ class GithubUser extends React.Component {
         );
     }
 }
+class NameForm extends React.Component {
+  constructor(props) {
+    super(props);
+    this.state = {value: ''};
+
+    this.handleChange = this.handleChange.bind(this);
+    this.handleSubmit = this.handleSubmit.bind(this);
+  }
+
+  handleChange(event) {
+    this.setState({value: event.target.value});
+  }
+
+  handleSubmit(event) {
+    alert('A name was submitted: ' + this.state.value);
+    event.preventDefault();
+  }
+
+  render() {
+    return (
+      <form onSubmit={this.handleSubmit}>
+        <label>Name:</label>
+        <input type="text" value={this.state.value} onChange={this.handleChange} />
+        <input type="submit" value="Submit" />
+      </form>
+    );
+  }
+}
+class EasySelect extends React.Component {
+    constructor(props) {
+        super(props);
+        this.state = {
+            value: 'Javascript'
+        };
+        this.handleChange = this.handleChange.bind(this);
+        this.handleSubmit = this.handleSubmit.bind(this);
+    }
+    handleChange(e) {
+        this.setState({value: e.target.value});
+    }
+    handleSubmit(e) {
+        alert('you choosed : ' + this.state.value);
+        e.preventDefault();
+    }
+    render() {
+        return (
+            <form onSubmit={this.handleSubmit}>
+                <h2>choos the language just you like:</h2>
+                <select value={this.state.value} onChange={this.handleChange}>
+                    <option value="C#">C#</option>
+                    <option value="Python">Python</option>
+                    <option value="Javascript">Javascript</option>
+                    <option value="Ruby">Ruby</option>
+                </select>
+                <input type="submit" value="submit" />
+            </form>
+        );
+    }
+}
+
 // ReactDOM.render(<App />, document.getElementById('app'));
 // ReactDOM.render(<HelloMsg name="more"/>, document.getElementById('app'));
 // ReactDOM.render(<HelloMsg_2 />, document.getElementById('app'));
@@ -283,3 +345,5 @@ ReactDOM.render(<TodoApp />, document.getElementById('todo-app'));
 ReactDOM.render(<MarkdownEditor />, document.getElementById('markdown'));
 ReactDOM.render(<LifeCycleTest />, document.getElementById('life-cycle'));
 ReactDOM.render(<GithubUser source="https://api.github.com/users/swust-xiaoj" />, document.getElementById('githubuser'));
+ReactDOM.render(<NameForm />, document.getElementById('root'));
+ReactDOM.render(<EasySelect />, document.getElementById('select'));
