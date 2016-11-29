@@ -337,6 +337,70 @@ class EasySelect extends React.Component {
     }
 }
 
+function LeftPanel() {
+    return (
+        <div className='left' />
+    );
+}
+
+function RightPanel() {
+    return (
+        <div className='right' />
+    );
+}
+function Panel(props) {
+    return (
+        <div className='container'>
+            <div className='left-wrap'>
+                {props.left}
+            </div>
+            <div className='right-wrap'>
+                {props.right}
+            </div>
+        </div>
+    );
+}
+function PanelApp() {
+    return (
+        <Panel left = { <LeftPanel /> } right = { <RightPanel /> } />
+    );
+}
+
+function Dialog(props) {
+    return (
+        <div className={'border border-' + props.borderColor}>
+            <h2 className='title'>{props.title}</h2>
+            <p className='message'>{props.message}</p>
+            {props.children}
+        </div>
+    );
+}
+class SignupDialog extends React.Component {
+    constructor(props) {
+        super(props);
+        this.handleChange = this.handleChange.bind(this);
+        this.handleClick = this.handleClick.bind(this);
+        this.state = {
+            loginName: ''
+        };
+    }
+    handleChange(e) {
+        this.setState({loginName: e.target.value});
+    }
+    handleClick(e) {
+        // es6 template
+        alert(`your name is: ${this.state.loginName}`);
+    }
+    render() {
+        return (
+            <Dialog title='React study Login' message='How we call you?' borderColor='blue'>
+                {/* props.children */}
+                <input type='text' value={this.state.loginName} onChange={this.handleChange} />
+                <button onClick={this.handleClick}>Sign up</button>
+            </Dialog>
+        );
+    }
+}
 // ReactDOM.render(<App />, document.getElementById('app'));
 // ReactDOM.render(<HelloMsg name="more"/>, document.getElementById('app'));
 // ReactDOM.render(<HelloMsg_2 />, document.getElementById('app'));
@@ -347,3 +411,5 @@ ReactDOM.render(<LifeCycleTest />, document.getElementById('life-cycle'));
 ReactDOM.render(<GithubUser source="https://api.github.com/users/swust-xiaoj" />, document.getElementById('githubuser'));
 ReactDOM.render(<NameForm />, document.getElementById('root'));
 ReactDOM.render(<EasySelect />, document.getElementById('select'));
+ReactDOM.render(<PanelApp />, document.getElementById('panel'));
+ReactDOM.render(<SignupDialog />, document.getElementById('dialog'));
